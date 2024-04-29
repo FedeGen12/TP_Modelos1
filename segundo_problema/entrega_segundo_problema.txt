@@ -1,0 +1,26 @@
+- Impresión del problema: 
+	Hay un aumento de complejidad importante debido únicamente a la cantidad de prendas que se agregaron (ya que el
+	problema en sí es el mismo que antes).
+
+- Forma de resolución: 
+	Continuamos con el mismo objetivo que antes: minimizar la cantidad total de lavados.
+
+	Lo que hice fue definime un diccionario de lavados, con clave igual al número de lavado y el valor asociado es una
+	lista con las prendas que van a ser lavadas en ese lavado particular. A partir de esto, lo instancio con un lavado
+	vacío, y luego, en cada iteración, para cada lavado ya creado, chequeo si la prenda sobre la que estoy iterando
+	actualmente es compatible con el resto de las prendas ya asignadas en dicho lavado.
+	    * Si es compatible ==> agrego a la prenda en cuestión al lavado.
+	    * Si no es compatible ==> sigo con el próximo lavado ya creado.
+
+	Si la prenda no es compatible con ninguno de los lavados creados hasta el momento, lo que hago es crear un nuevo
+	lavado que contenga únicamente a dicha prenda, y lo agrego al diccionario de los lavados ya creados.
+
+- Comentarios:
+	Inicialmente probé resolverlo con programación lineal de tres formas distintas:
+	    - Con el mismo algoritmo del primer problema.
+	    - Con Scheduling.
+	    - Con Coloreo de grafos.
+	El problema es que, debido a la dimensión del problema, se generan una cantidad de variables importantes. Intenté
+	correr los 3 modelos (por separado lógicamente) y ninguno logró terminar en menos de 8 horas (al momento en el que
+	estoy escribiendo esto, el modelo de Coloreo va +8hs corriendo, pero voy a dejarlo lo máximo posible para poder
+	comparar el resultado con la aproximación obtenida con este algoritmo que estoy entregando).

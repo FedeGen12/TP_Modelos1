@@ -74,7 +74,7 @@ def mostrar_solucion_en_pantalla(lavados, tiempo_de_lavado):
     for lavado in lavados:
         tiempo_lavado_actual = 0
         for prenda in lavados[lavado]:
-            tiempo_lavado_actual += tiempo_de_lavado[prenda]
+            tiempo_lavado_actual = max(tiempo_lavado_actual, tiempo_de_lavado[prenda])
         print(f"Prendas lavadas en Lavado {lavado}: {lavados[lavado]} en {tiempo_lavado_actual} unidades de tiempo")
         tiempo_total_de_lavado += tiempo_lavado_actual
     print(f"Tiempo total de lavado: {tiempo_total_de_lavado}")
