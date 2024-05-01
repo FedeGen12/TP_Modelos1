@@ -29,3 +29,22 @@
     Me pareció interesante realizar la implementación del coloreo con grafos con programación lineal más allá de que
     tarda demasiado tiempo con el dominio del segundo problema. Lo probé con el dominio del primer problema y funciona
     perfectamente, dando el resultado óptimo (o al menos el que creemos óptimo).
+
+- Comentario sobre Coloreo sin PL:
+    Decidí aplicar la técnica de Backtracking para coloreo de grafos, logrando llegar a una solución con el dominio
+    del segundo problema en aproximadamente 10 segundos. Notar que, durante el recorrido del árbol de soluciones, se
+    aplican 3 condiciones de poda sobre la solución en la iteración actual (la cual llamo solución actual):
+        * Si la solución actual ya no es compatible porque pusimos a una prenda con otra incompatible (o sea, pintamos dos
+          vértices adyacentes del mismo color), cortamos y no seguimos recorriendo esa rama de soluciones.
+        * Si la solución actual usa más lavados (colores) que la mejor que encontramos hasta ahora, también cortamos.
+        * Si la solución actual usa más tiempo de lavado que la mejor que encontramos hasta ahora, también cortamos.
+    De esta forma, logramos evitar recorrer el árbol de soluciones completo, obteniendo un rendimiento mucho mejor que
+    un algoritmo de fuerza bruta (que recorre el árbol completo aunque muchas ramas no nos lleven a soluciones óptimas
+    o factibles).
+
+    En este segundo commit de la solución de Coloreo sin PL, agregué una parte en para considerar dominios que formen
+    grafos con vértices aislados o con ciclos aislados. En nuestro caso sucede con varias prendas, por ejemplo, la
+    prenda 104 es incompatible solo con la 136, y la 136 solo con la 104. Entonces, en el grafo, tenemos una única
+    arista no dirigida (porque así modelé el grafo) de 104 a 136, quedando estos dos vértices completamente aislados
+    de los demás. Por lo tanto, con el algoritmo que tenía hasta ahora, no se recorrían nunca, haciendo que nunca se les
+    asigne un color (o sea, un lavado). Con este chequeo agregado, siempre se pintan (lavan) todos los vértices (prendas).
