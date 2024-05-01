@@ -24,3 +24,8 @@
 	correr los 3 modelos (por separado lógicamente) y ninguno logró terminar en menos de 8 horas (al momento en el que
 	estoy escribiendo esto, el modelo de Coloreo va +8hs corriendo, pero voy a dejarlo lo máximo posible para poder
 	comparar el resultado con la aproximación obtenida con este algoritmo que estoy entregando).
+
+- Comentario sobre Coloreo con PL:
+    Me pareció interesante realizar la implementación del coloreo con grafos con programación lineal más allá de que
+    tarda demasiado tiempo con el dominio del segundo problema. Lo probé con el dominio del primer problema y funciona
+    perfectamente, dando el resultado óptimo (o al menos el que creemos óptimo).
