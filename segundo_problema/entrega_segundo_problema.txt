@@ -48,3 +48,8 @@
     arista no dirigida (porque así modelé el grafo) de 104 a 136, quedando estos dos vértices completamente aislados
     de los demás. Por lo tanto, con el algoritmo que tenía hasta ahora, no se recorrían nunca, haciendo que nunca se les
     asigne un color (o sea, un lavado). Con este chequeo agregado, siempre se pintan (lavan) todos los vértices (prendas).
+
+    Agrego la escritura del archivo con la solución a este problema. Vemos que lo soluciona de una forma más eficiente
+    que la versión sin programación lineal que hice (la que no usaba coloreo). Ésta última nos daba un tiempo total de
+    lavado de 755, y la versión sin programación lineal pero con coloreo nos devuelve un tiempo total de 703, usando
+    dos lavados menos.

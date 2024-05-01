@@ -1,21 +1,4 @@
-import csv
 from utilidades import *
-
-RUTA_ARCHIVO = 'segundo_problema.txt'
-RUTA_SOLUCION = "solucion_segundo_problema.txt"
-
-COMANDO = 0
-PRENDA_1 = 1
-PRENDA_2 = 2
-TIEMPO_LAVADO = 2
-CANT_PRENDAS = 2
-
-DEFINICION_PROBLEMA = 'p'
-INCOMPATIBILIDAD = 'e'
-TIEMPO_LAVADOS = 'n'
-
-DELIMITER = " "
-LINE_TERMINATOR = '\n'
 
 
 def procesar_archivo_prendas():
@@ -68,14 +51,6 @@ def prenda_es_compatible_en(lavado, prenda, incompatibilidades):
         if prenda in incompatibilidades.get(prenda_actual, []):
             return False
     return True
-
-
-def escribir_solucion(lavados):
-    with open(RUTA_SOLUCION, 'w') as arc_solucion:
-        csv_writer = csv.writer(arc_solucion, delimiter=DELIMITER, lineterminator=LINE_TERMINATOR)
-        for lavado in lavados:
-            for prenda in lavados[lavado]:
-                csv_writer.writerow([prenda, lavado])
 
 
 if __name__ == '__main__':

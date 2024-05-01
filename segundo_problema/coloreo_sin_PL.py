@@ -72,6 +72,7 @@ def solucion_por_coloreo(tiempo_de_lavado):
         lavados[lavado_actual] = lavados.get(lavado_actual, []) + [prenda_]
 
     mostrar_solucion_en_pantalla(lavados, tiempo_de_lavado)
+    escribir_solucion(lavados)
 
 
 def coloreo_rec(grafo, k, v_pintados, v, min_colores, min_sol, min_tiempo, tiempo_lavados):

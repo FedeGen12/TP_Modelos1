@@ -1,4 +1,6 @@
-NOMBRE_ARCHIVO = 'segundo_problema.txt'
+import csv
+
+RUTA_ARCHIVO = 'segundo_problema.txt'
 RUTA_SOLUCION = "solucion_segundo_problema.txt"
 
 COMANDO = 0
@@ -21,7 +23,7 @@ def procesar_archivo_prendas():
     lavados = {}
     cant_prendas = 0
 
-    with (open(NOMBRE_ARCHIVO) as archivo_prendas):
+    with (open(RUTA_ARCHIVO) as archivo_prendas):
         for linea in archivo_prendas:
             contenido = linea.split()
             comando = contenido[COMANDO]
@@ -55,3 +57,11 @@ def mostrar_solucion_en_pantalla(lavados, tiempo_de_lavado):
         print(f"Prendas lavadas en Lavado {lavado}: {lavados[lavado]} en {tiempo_lavado_actual} unidades de tiempo")
         tiempo_total_de_lavado += tiempo_lavado_actual
     print(f"Tiempo total de lavado: {tiempo_total_de_lavado}")
+
+
+def escribir_solucion(lavados):
+    with open(RUTA_SOLUCION, 'w') as arc_solucion:
+        csv_writer = csv.writer(arc_solucion, delimiter=DELIMITER, lineterminator=LINE_TERMINATOR)
+        for lavado in lavados:
+            for prenda in lavados[lavado]:
+                csv_writer.writerow([prenda, lavado])
