@@ -13,6 +13,8 @@ T_LAVADOS = 1
 CORRECTO = 2
 T_TOTAL_LAVADOS = 3
 
+CANT_COLORES = 60
+
 
 def es_compatible(grafo, colores, v):
     for w in grafo.neighbors(v):
@@ -72,6 +74,9 @@ def solucion_por_coloreo(cant_prendas, t_lavado_prendas):
                 vertice_inicial = prenda
                 sol_parcial = coloreo_rec(dominio, sol_parcial, vertice_inicial, sol_optima)
 
+        if not sol_parcial[CORRECTO]:
+            continue
+
         if sol_parcial[T_TOTAL_LAVADOS] < sol_optima[MEJOR_TIEMPO]:
             sol_optima[MEJOR_IND_CROMATICO] = len(sol_parcial[T_LAVADOS])
             sol_optima[MEJOR_SOL] = sol_parcial[PINTADOS].copy()
@@ -80,25 +85,45 @@ def solucion_por_coloreo(cant_prendas, t_lavado_prendas):
     return sol_optima
 
 
-def coloreo_rec(dominio, sol_parcial, v, sol_optima):
-    # Para cada color, pinto el vertice de ese color, y, si es compatible, me fijo si me da menor tiempo que antes
-    for color in range(1, sol_optima[MEJOR_IND_CROMATICO] + 1):
-        sol_parcial[PINTADOS][v] = color                        # Pinto al vertice v del color `color`
+def buscar_mejor_color(dominio, sol_parcial, v, sol_optima, color_inicial):
+    mejor_color, mejor_tiempo = 1, sol_optima[MEJOR_TIEMPO] + 1
+    for color in range(color_inicial, CANT_COLORES):
+        sol_parcial[PINTADOS][v] = color  # Pinto al vertice v del color `color`
 
         if not es_compatible(dominio[GRAFO], sol_parcial[PINTADOS], v):
             continue
 
-        t_lav_ant = sol_parcial[T_LAVADOS].get(color, 0)
-        sol_parcial[T_LAVADOS][color] = max(t_lav_ant, dominio[T_LAV_PRENDAS][v])
+        t_lavado_ant = sol_parcial[T_LAVADOS].get(color, 0)
+        diferencia = dominio[T_LAV_PRENDAS][v] - t_lavado_ant
+
+        if diferencia < 0:
+            mejor_tiempo = sol_parcial[T_TOTAL_LAVADOS]
+            mejor_color = color
+            break
+
+        if diferencia > 0 and (sol_parcial[T_TOTAL_LAVADOS] + diferencia < mejor_tiempo):
+            mejor_tiempo = sol_parcial[T_TOTAL_LAVADOS] + diferencia
+            mejor_color = color
+
+    return mejor_color, mejor_tiempo
+
+
+def coloreo_rec(dominio, sol_parcial, v, sol_optima):
+    # Para cada color, pinto el vertice de ese color, y, si es compatible, me fijo si me da menor tiempo que antes
+    mejor_color = 0
+    while mejor_color < 50:
+        mejor_color, mejor_tiempo = buscar_mejor_color(dominio, sol_parcial, v, sol_optima, mejor_color+1)
+
+        if mejor_tiempo > sol_optima[MEJOR_TIEMPO]:
+            break
+
+        sol_parcial[PINTADOS][v] = mejor_color
+
+        t_lav_ant = sol_parcial[T_LAVADOS].get(mejor_color, 0)
+        sol_parcial[T_LAVADOS][mejor_color] = max(t_lav_ant, dominio[T_LAV_PRENDAS][v])
         diferencia = dominio[T_LAV_PRENDAS][v] - t_lav_ant
         if diferencia > 0:
             sol_parcial[T_TOTAL_LAVADOS] += diferencia
-
-        if sol_parcial[T_TOTAL_LAVADOS] > sol_optima[MEJOR_TIEMPO]:
-            # Vuelvo a poner los tiempos de lavado como estaban antes
-            sol_parcial[T_LAVADOS][color] = t_lav_ant
-            sol_parcial[T_TOTAL_LAVADOS] -= diferencia
-            continue
 
         sol_parcial[CORRECTO] = True
         for w in dominio[GRAFO].neighbors(v):
@@ -107,14 +132,14 @@ def coloreo_rec(dominio, sol_parcial, v, sol_optima):
 
             sol_parcial = coloreo_rec(dominio, sol_parcial, w, sol_optima)
 
-            if not sol_parcial[CORRECTO] or len(sol_parcial[PINTADOS]) == len(sol_optima[MEJOR_SOL]):
+            if not sol_parcial[CORRECTO]:
                 break
 
         if sol_parcial[CORRECTO] and sol_parcial[T_TOTAL_LAVADOS] < sol_optima[MEJOR_TIEMPO]:
             return sol_parcial
 
         # Vuelvo a poner los tiempos de lavado como estaban antes
-        sol_parcial[T_LAVADOS][color] = t_lav_ant
+        sol_parcial[T_LAVADOS][mejor_color] = t_lav_ant
         sol_parcial[T_TOTAL_LAVADOS] -= diferencia
 
     del sol_parcial[PINTADOS][v]
