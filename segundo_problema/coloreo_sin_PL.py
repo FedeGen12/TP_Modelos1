@@ -110,12 +110,8 @@ def coloreo_rec(dominio, sol_parcial, v, sol_optima):
             if not sol_parcial[CORRECTO] or len(sol_parcial[PINTADOS]) == len(sol_optima[MEJOR_SOL]):
                 break
 
-        if sol_parcial[CORRECTO]:
-            # if (len(sol_parcial[PINTADOS]) >= len(sol_optima[MEJOR_SOL]) and
-            # sol_parcial[PINTADOS] != sol_optima[MEJOR_SOL] and
-            if(
-                    sol_parcial[T_TOTAL_LAVADOS] < sol_optima[MEJOR_TIEMPO]):
-                return sol_parcial
+        if sol_parcial[CORRECTO] and sol_parcial[T_TOTAL_LAVADOS] < sol_optima[MEJOR_TIEMPO]:
+            return sol_parcial
 
         # Vuelvo a poner los tiempos de lavado como estaban antes
         sol_parcial[T_LAVADOS][color] = t_lav_ant
