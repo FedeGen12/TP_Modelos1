@@ -18,7 +18,7 @@ DELIMITER = " "
 LINE_TERMINATOR = '\n'
 
 
-def procesar_archivo_prendas():
+def procesar_archivo_prendas(version=1):
     incompatibilidades = {}
     lavados = {}
     cant_prendas = 0
@@ -35,17 +35,29 @@ def procesar_archivo_prendas():
                 cant_prendas = int(contenido[CANT_PRENDAS])
 
             elif comando == INCOMPATIBILIDAD:
-                # Para evitar redundancias --> si p1 es incompatible con p2, evito decir que p2 es incompatible con p1
-                prenda1 = int(contenido[PRENDA_1])
-                prenda2 = int(contenido[PRENDA_2])
-                if prenda1 not in incompatibilidades.get(prenda2, []):
-                    incompatibilidades[prenda1] = incompatibilidades.get(prenda1, []) + [prenda2]
+                if version == 1:
+                    manejar_incompatibilidades1(int(contenido[PRENDA_1]), int(contenido[PRENDA_2]), incompatibilidades)
+                else:
+                    manejar_incompatibilidades2(int(contenido[PRENDA_1]), int(contenido[PRENDA_2]), incompatibilidades)
 
             elif comando == TIEMPO_LAVADOS:
                 prenda1 = int(contenido[PRENDA_1])
                 lavados[prenda1] = lavados.get(prenda1, 0) + int(contenido[TIEMPO_LAVADO])
 
     return cant_prendas, incompatibilidades, lavados
+
+
+def manejar_incompatibilidades1(prenda1, prenda2, incompatibilidades):
+    # Para evitar redundancias --> si p1 es incompatible con p2, evito decir que p2 es incompatible con p1
+    if prenda1 not in incompatibilidades.get(prenda2, []):
+        incompatibilidades[prenda1] = incompatibilidades.get(prenda1, []) + [prenda2]
+
+
+def manejar_incompatibilidades2(prenda1, prenda2, incompatibilidades):
+    if prenda1 not in incompatibilidades.get(prenda2, []):
+        incompatibilidades[prenda2] = incompatibilidades.get(prenda2, []) + [prenda1]
+    if prenda2 not in incompatibilidades.get(prenda1, []):
+        incompatibilidades[prenda1] = incompatibilidades.get(prenda1, []) + [prenda2]
 
 
 def mostrar_solucion_en_pantalla(lavados, tiempo_de_lavado):
