@@ -1,6 +1,6 @@
 import csv
 
-RUTA_ARCHIVO = 'segundo_problema.txt'
+RUTA_ARCHIVO = '../tercera_parte/tercera_parte/tercer_problema.txt'
 RUTA_SOLUCION = "solucion_segundo_problema.txt"
 
 COMANDO = 0
